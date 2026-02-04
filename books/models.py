@@ -31,7 +31,7 @@ class Book(models.Model):
         ordering = ["title"]
 
     def __str__(self):
-        return f"Книга: {self.title}, автор: {self.author}"
+        return f"Книга: {self.title}, {self.author}"
 
 
 class BookIssue(models.Model):
@@ -59,4 +59,4 @@ class BookIssue(models.Model):
         ordering = ["user"]
 
     def __str__(self):
-        return f"Взятая под запись книга:{self.book.title}, читатель: {self.user.first_name} {self.user.last_name}"
+        return f"Взятая под запись книга: {self.book.title}, читатель: {self.user.first_name} {self.user.last_name}"

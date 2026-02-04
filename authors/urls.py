@@ -12,9 +12,9 @@ from authors.views import (
 app_name = AuthorsConfig.name
 
 urlpatterns = [
-    path("", AuthorListAPIView.as_view(), name="author-list"),
-    path("create/", AuthorCreateAPIView.as_view(), name="author-create"),
-    path("<int:pk>/", AuthorRetrieveAPIView.as_view(), name="author-detail"),
-    path("<int:pk>/update/", AuthorUpdateAPIView.as_view(), name="author-update"),
-    path("<int:pk>/delete/", AuthorDestroyAPIView.as_view(), name="author-delete"),
+    path("", AuthorListAPIView.as_view(), name="author_list"),
+    path("create/", AuthorCreateAPIView.as_view(), name="author_create"),
+    path("<int:pk>/", AuthorRetrieveAPIView.as_view(), name="author_detail"),
+    path("<int:pk>/update/", AuthorUpdateAPIView.as_view(), name="author_update"),
+    path("<int:pk>/delete/", AuthorDestroyAPIView.as_view(), name="author_delete"),
 ]
