@@ -11,7 +11,7 @@ from rest_framework.permissions import AllowAny
 
 from books.models import BookIssue
 from users.models import User
-from users.permissions import IsLibrarianOrOwner, IsLibrarian
+from users.permissions import IsLibrarian, IsLibrarianOrOwner
 from users.serializers import UserSerializer
 
 
