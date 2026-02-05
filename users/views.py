@@ -30,7 +30,7 @@ class UserCreateAPIView(CreateAPIView):
 class UserListAPIView(ListAPIView):
     queryset = User.objects.filter(is_active=True)
     serializer_class = UserSerializer
-    permission_classes = [IsLibrarian] # Только сотрудники
+    permission_classes = [IsLibrarian]  # Только сотрудники
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["first_name", "last_name", "phone_number"]
 
