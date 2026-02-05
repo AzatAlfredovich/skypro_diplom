@@ -202,6 +202,7 @@ class BookIssueAPITest(APITestCase):
         self.assertGreaterEqual(len(response.data), 1)
 
     def test_create_issue_success(self):
+        """Тест на создание выдачи библиотекарем"""
         self.client.force_authenticate(user=self.librarian)
         data = {
             "book": self.book.id,
@@ -214,6 +215,7 @@ class BookIssueAPITest(APITestCase):
         self.assertEqual(BookIssue.objects.count(), 2)
 
     def test_create_issue_book_not_available(self):
+        """Тест на создание выдачи неактивной книги библиотекарем"""
         self.client.force_authenticate(user=self.librarian)
         self.book.is_available = False
         self.book.save()
@@ -227,6 +229,7 @@ class BookIssueAPITest(APITestCase):
         self.assertIn("book", response.data)
 
     def test_update_issue_mark_returned(self):
+        """Тест на обновление выдачи"""
         self.client.force_authenticate(user=self.librarian)
         data = {"is_returned": True}
         response = self.client.patch(self.issue_update_url, data, format="json")
@@ -237,18 +240,21 @@ class BookIssueAPITest(APITestCase):
         self.assertTrue(self.book.is_available)
 
     def test_update_issue_unauthorized(self):
+        """Тест на обновление выдачи пользователем"""
         self.client.force_authenticate(user=self.user)
         data = {"is_returned": True}
         response = self.client.patch(self.issue_update_url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_issue_success(self):
+        """Тест на успешное удаление выдачи библиотекарем"""
         self.client.force_authenticate(user=self.librarian)
         response = self.client.delete(self.issue_delete_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(BookIssue.objects.filter(pk=self.issue.pk).exists())
 
     def test_retrieve_issue_unauthorized(self):
+        """Тест на просмотр не своей выдачи"""
         other_user = User.objects.create(
             email="testother@example.com",
             first_name="Сергей",
@@ -268,6 +274,7 @@ class BookIssueAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_issue_invalid_due_date(self):
+        """Тест разрешения на создание выдачи с неверной датой."""
         self.client.force_authenticate(user=self.librarian)
         data = {"book": self.book.id, "user": self.user.id, "due_date": "invalid-date"}
         response = self.client.post(self.issue_create_url, data, format="json")
@@ -275,20 +282,24 @@ class BookIssueAPITest(APITestCase):
         self.assertIn("due_date", response.data)
 
     def test_permissions_book_list_for_anonymous(self):
+        """Тест разрешения на список книг неавторизованному пользователю."""
         response = self.client.get(self.issues_list_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_permissions_issue_list_for_anonymous(self):
+        """Тест разрешения на список выдач неавторизованному пользователю."""
         response = self.client.get(self.issues_list_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_permissions_create_book_for_reader(self):
+        """Тест разрешения на создание книги пользователем."""
         self.client.force_authenticate(user=self.user)
         data = {"title": "Новая книга", "article": "BK006", "author": self.author.id}
         response = self.client.post(self.issue_create_url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_permissions_update_issue_for_reader(self):
+        """Тест разрешения на обновление выдачи пользователем."""
         self.client.force_authenticate(user=self.user)
         data = {"is_returned": True}
         response = self.client.patch(self.issue_update_url, data, format="json")
