@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import (
     CreateAPIView,
@@ -29,7 +30,9 @@ class UserCreateAPIView(CreateAPIView):
 class UserListAPIView(ListAPIView):
     queryset = User.objects.filter(is_active=True)
     serializer_class = UserSerializer
-    permission_classes = [IsLibrarian]  # Только сотрудники
+    permission_classes = [IsLibrarian] # Только сотрудники
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["first_name", "last_name", "phone_number"]
 
 
 class UserRetrieveAPIView(RetrieveAPIView):

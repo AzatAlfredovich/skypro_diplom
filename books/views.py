@@ -83,6 +83,8 @@ class BookIssueListAPIView(ListAPIView):
 
     serializer_class = BookIssueSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["book", "user"]
 
     def get_queryset(self):
         if self.request.user.is_librarian:
