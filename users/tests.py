@@ -1,10 +1,9 @@
 from django.db import IntegrityError
 from django.urls import reverse
-from rest_framework.test import APITestCase
 from rest_framework import status
+from rest_framework.test import APITestCase
 
 from users.models import User
-
 
 
 class UserModelTest(APITestCase):
@@ -15,7 +14,7 @@ class UserModelTest(APITestCase):
             last_name="Иванов",
             password="password123",
             phone_number="+79991234567",
-            is_librarian=False
+            is_librarian=False,
         )
 
     def test_user_creation(self):
@@ -43,7 +42,7 @@ class UserModelTest(APITestCase):
                 email=None,
                 first_name="Алексей",
                 last_name="Петров",
-                password="password123"
+                password="password123",
             )
 
 
@@ -51,17 +50,11 @@ class UserAPITest(APITestCase):
     def setUp(self):
         # Создаём пользователей
         self.librarian = User.objects.create(
-            email="librarian@test.com",
-            password="pass123",
-            is_librarian=True
+            email="librarian@test.com", password="pass123", is_librarian=True
         )
-        self.owner = User.objects.create(
-            email="owner@test.com",
-            password="pass123"
-        )
+        self.owner = User.objects.create(email="owner@test.com", password="pass123")
         self.other_user = User.objects.create(
-            email="other@test.com",
-            password="pass123"
+            email="other@test.com", password="pass123"
         )
 
         # URL
@@ -77,7 +70,7 @@ class UserAPITest(APITestCase):
             "email": "new@test.com",
             "password": "securepass123",
             "first_name": "Алексей",
-            "last_name": "Сидоров"
+            "last_name": "Сидоров",
         }
         response = self.client.post(self.register_url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -101,10 +94,10 @@ class UserAPITest(APITestCase):
         self.assertGreaterEqual(len(response.data), 1)
 
     def test_list_users_owner(self):
-        """Владелец видит список (но не обязательно свои данные)."""
+        """Владелец не видит список пользователей."""
         self.client.force_authenticate(user=self.owner)
         response = self.client.get(self.list_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_retrieve_owner(self):
         """Владелец получает свои данные."""

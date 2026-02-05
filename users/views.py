@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import (
     CreateAPIView,
@@ -8,8 +9,9 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import AllowAny
 
+from books.models import BookIssue
 from users.models import User
-from users.permissions import IsLibrarianOrOwner
+from users.permissions import IsLibrarianOrOwner, IsLibrarian
 from users.serializers import UserSerializer
 
 
@@ -27,7 +29,7 @@ class UserCreateAPIView(CreateAPIView):
 class UserListAPIView(ListAPIView):
     queryset = User.objects.filter(is_active=True)
     serializer_class = UserSerializer
-    permission_classes = [IsLibrarianOrOwner]  # Только сотрудники и владельцы
+    permission_classes = [IsLibrarian]  # Только сотрудники
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
@@ -62,4 +64,16 @@ class UserDestroyAPIView(DestroyAPIView):
         if not obj.is_active:
             raise NotFound("Пользователь не найден или неактивен!")
         self.check_object_permissions(self.request, obj)
+        active_issues = BookIssue.objects.filter(user=obj, is_returned=False)
+
+        if active_issues.exists():
+            raise ValidationError(
+                {
+                    "detail": (
+                        "Нельзя удалить пользователя: у него есть невозвращенные книги. "
+                        "Сначала необходимо вернуть все книги!"
+                    )
+                }
+            )
+
         return obj
