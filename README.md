@@ -64,10 +64,10 @@ git clone https://github.com/AzatAlfredovich/skypro_diplom.git
 ```
 pip install -r requirements.txt
 ```
-- Создайте файл .env по шаблону .env.sample. и заполните его.
+- Создайте файл .env по шаблону .env.sample. и заполните его, учитывая имя сервиса в docker-compose.
 - Запустите контейнеры через Docker Compose
 ```
-docker-compose up
+docker-compose up -d --build
 ```
 
 ---
