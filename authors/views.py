@@ -16,7 +16,7 @@ from users.permissions import IsLibrarian
 class AuthorListAPIView(ListAPIView):
     """
     GET: список всех авторов.
-    Доступ: только библиотекари (is_staff=True).
+    Доступ: только библиотекари (is_librarian=True).
     """
 
     queryset = Author.objects.all()
@@ -29,7 +29,7 @@ class AuthorListAPIView(ListAPIView):
 class AuthorCreateAPIView(CreateAPIView):
     """
     POST: создание нового автора.
-    Доступ: только библиотекари (is_staff=True).
+    Доступ: только библиотекари (is_librarian=True).
     """
 
     queryset = Author.objects.all()
@@ -40,7 +40,7 @@ class AuthorCreateAPIView(CreateAPIView):
 class AuthorRetrieveAPIView(RetrieveAPIView):
     """
     GET: детальная информация об авторе.
-    Доступ: только библиотекари (is_staff=True).
+    Доступ: только библиотекари (is_librarian=True).
     """
 
     queryset = Author.objects.all()
@@ -51,7 +51,7 @@ class AuthorRetrieveAPIView(RetrieveAPIView):
 class AuthorUpdateAPIView(UpdateAPIView):
     """
     PUT/PATCH: редактирование автора.
-    Доступ: только библиотекари (is_staff=True).
+    Доступ: только библиотекари (is_librarian=True).
     """
 
     queryset = Author.objects.all()
@@ -62,7 +62,7 @@ class AuthorUpdateAPIView(UpdateAPIView):
 class AuthorDestroyAPIView(DestroyAPIView):
     """
     DELETE: удаление автора.
-    Доступ: только библиотекари (is_staff=True).
+    Доступ: только библиотекари (is_librarian=True).
     """
 
     queryset = Author.objects.all()

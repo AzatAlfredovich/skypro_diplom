@@ -53,7 +53,7 @@ class BookRetrieveAPIView(RetrieveAPIView):
 class BookUpdateAPIView(UpdateAPIView):
     """
     PUT/PATCH: редактирование книги.
-    Доступ: только библиотекари (is_staff=True).
+    Доступ: только библиотекари (is_librarian=True).
     """
 
     queryset = Book.objects.all()
@@ -64,7 +64,7 @@ class BookUpdateAPIView(UpdateAPIView):
 class BookDestroyAPIView(DestroyAPIView):
     """
     DELETE: удаление книги.
-    Доступ: только библиотекари (is_staff=True).
+    Доступ: только библиотекари (is_librarian=True).
     """
 
     queryset = Book.objects.all()
